@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAPPIST-1e | Eksoplaneetan Tutkimusmatka</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --space-black: #05070a;
+            --deep-blue: #0f172a;
+            --accent-cyan: #22d3ee;
+            --accent-red: #ef4444;
+            --text-light: #f8fafc;
+            --glass: rgba(15, 23, 42, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--space-black);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Taustan tähdet */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111827 0%, #05070a 100%);
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+        }
+
+        /* Navigointi */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(5, 7, 10, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Hero-osio */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+        }
+
+        header h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            max-width: 700px;
+        }
+
+        /* Kontenttialueet */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 8rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 1s all ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--glass);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-cyan);
+        }
+
+        h3 {
+            color: var(--accent-red);
+            margin-bottom: 1rem;
+        }
+
+        /* Kuvat */
+        .image-box {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: 0.5s;
+        }
+
+        .image-box:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Speksilista */
+        .specs {
+            list-style: none;
+        }
+
+        .specs li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .specs li span {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: #020617;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .source-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 3rem; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <nav>
+        <a href="#alkupera">Alkuperä</a>
+        <a href="#etaisyys">Etäisyys</a>
+        <a href="#koko">Koko & Massa</a>
+        <a href="#ilmasto">Ilmasto</a>
+        <a href="#elama">Elämä</a>
+    </nav>
+
+    <header>
+        <h1>TRAPPIST-1e</h1>
+        <p>Tutkimusmatka maankaltaisimpaan tunnettuun maailmaan Vesimiehen tähdistössä.</p>
+    </header>
+
+    <div class="container">
+        
+        <section id="alkupera" class="grid">
+            <div class="card">
+                <h2>Nimen Alkuperä</h2>
+                <p>Planeetta on saanut nimensä <strong>TRAPPIST</strong>-teleskoopin (Transiting Planets and Planetesimals Small Telescope) mukaan. Kyseinen teleskooppi teki ensimmäiset havainnot tästä järjestelmästä.</p>
+                <br>
+                <p>Numero <strong>1</strong> viittaa järjestelmän olevan ensimmäinen kyseisellä laitteella löydetty. Kirjain <strong>e</strong> tarkoittaa, että se on viides planeetta tähdestä ulospäin laskettuna.</p>
+            </div>
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&q=80&w=800" alt="Eksoplaneetta ja tähti">
+            </div>
+        </section>
+
+        <section id="kuvat">
+            <h2 style="text-align: center;">Visualisointeja</h2>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="image-box">
+                    <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&q=80&w=600" alt="Galaksi">
+                </div>
+                <div class="image-box">
+                    <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=600" alt="Avaruusalus">
+                </div>
+            </div>
+        </section>
+
+        <section id="etaisyys" class="grid">
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" alt="Avaruusverkko">
+            </div>
+            <div class="card">
+                <h2>Sijainti ja Ryhmä</h2>
+                <ul class="specs">
+                    <li>Etäisyys Maasta <span>40 valovuotta</span></li>
+                    <li>Etäisyys tähdestään <span>0,029 AU</span></li>
+                    <li>Planeettaryhmä <span>Kiviplaneetta</span></li>
+                    <li>Luokitus <span>Maankaltainen (Terrestriaalinen)</span></li>
+                </ul>
+                <p style="margin-top: 1rem;">TRAPPIST-1e on niin lähellä tähteään, että sen vuosi kestää vain 6 päivää, mutta tähti on paljon Aurinkoa himmeämpi.</p>
+            </div>
+        </section>
+
+        <section id="koko" class="card">
+            <h2>Koko ja Massa</h2>
+            <div class="grid">
+                <div>
+                    <h3>Halkaisija</h3>
+                    <p>Planeetan halkaisija on noin <strong>11 590 km</strong>. Se on noin <strong>91 %</strong> maapallon koosta, eli se on hieman pienempi kuin kotimme.</p>
+                </div>
+                <div>
+                    <h3>Massa</h3>
+                    <p>Massa on noin <strong>0,69-kertainen</strong> Maahan verrattuna. Suuresta tiheydestään johtuen sillä uskotaan olevan massiivinen rautaydin.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ilmasto" class="grid">
+            <div class="card">
+                <h2>Olosuhteet</h2>
+                <h3>Lämpötila</h3>
+                <p>Keskilämpötila on arviolta <strong>-22 °C</strong>. Se on hieman kylmempi kuin Maa, mutta koska se on vuorovesilukittunut, toinen puoli on jatkuvassa valossa ja toinen pimeydessä. Lämpötila vaihtelee suuresti näiden välillä.</p>
+                <br>
+                <h3>Kaasukehä & Pinta</h3>
+                <p>Pinta on kiviperäinen (silikaattia). Kaasukehä on todennäköisesti ohut, koostuen typestä tai hiilidioksidista. James Webb -teleskooppi tutkii tätä parhaillaan.</p>
+            </div>
+            <div class="card">
+                <h2>Muita piirteitä</h2>
+                <ul class="specs">
+                    <li>Kuut <span>Ei tunnettuja kuita</span></li>
+                    <li>Vuorokauden pituus <span>6,1 Maan päivää</span></li>
+                    <li>Sijainti tähdistössä <span>Vesimies</span></li>
+                </ul>
+                <br>
+                <p>Erikoista: Naapuriplaneetat näkyvät taivaalla kaksi kertaa suurempina kuin Kuu näkyy Maasta.</p>
+            </div>
+        </section>
+
+        <section id="elama" class="card" style="border-color: var(--accent-cyan);">
+            <h2 style="text-align: center;">Voisiko siellä olla elämää?</h2>
+            <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
+                TRAPPIST-1e on yksi lupaavimmista ehdokkaista. Se sijaitsee elinkelpoisella vyöhykkeellä, missä vesi voi pysyä nestemäisenä. Haasteena on kuitenkin tähden voimakas säteily ja vuorovesilukitus. Tutkijat pitävät elämän mahdollisuutta toiveikkaana, mutta vahvistusta ei vielä ole.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <h2>Lisätietoa</h2>
+        <p>Voit katsoa NASA:n visualisointeja YouTubesta hakusanalla "TRAPPIST-1e NASA".</p>
+        <br>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="https://exoplanets.nasa.gov" class="source-link">NASA Exoplanet Archive</a>
+            <a href="https://trappist.one" class="source-link">TRAPPIST-1 Official</a>
+            <a href="https://space.com" class="source-link">Space.com</a>
+        </div>
+        <br><br>
+        <p style="opacity: 0.5; font-size: 0.8rem;">Tämä sivusto on luotu informatiiviseen käyttöön. Ei emojeja.</p>
+    </footer>
+
+    <script>
+        // Skrollaus-animaatio: näyttää elementit kun ne tulevat näkyviin
+        const sections = document.querySelectorAll('section');
+        
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll navigointiin
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
